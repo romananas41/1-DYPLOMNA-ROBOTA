@@ -14,12 +14,25 @@ let isGameStarted = false;
 let score = 0;
 let dropCounter = 0;
 let dropInterval = 1000;
+let linesCleared = 0; // Додаємо змінну для зберігання кількості знищених ліній
 
 // Кнопки
 const startBtn = document.getElementById('startBtn');
 const pauseBtn = document.getElementById('pauseBtn');
 const levelSelector = document.getElementById('levelSelector');
 const levelSelect = document.getElementById('levelSelect');
+const scoreDisplay = document.getElementById('score'); // Додайте цю стрічку
+
+// Оновлення рахунку
+function updateScore() {
+    scoreDisplay.textContent = score;
+    document.getElementById('levelDisplay').textContent = level; // Оновлюємо відображення рівня
+}
+
+// Не забудьте оновити кнопку, щоб перемикач рівня змінював значення level
+levelSelect.addEventListener('change', function() {
+    level = parseInt(this.value);
+});
 
 // Фігури Тетріс (міні-поліміно)
 const pieces = [
@@ -94,6 +107,26 @@ function moveDown() {
     }
 }
 
+// Функція для повороту фігури на 90 градусів за годинниковою стрілкою
+function rotatePiece() {
+    // Створюємо нову матрицю, яка є поворотом поточної фігури
+    const rotatedShape = activePiece.shape[0].map((_, index) =>
+        activePiece.shape.map(row => row[index]).reverse()
+    );
+    
+    // Зберігаємо оригінальну форму для можливості відкату
+    const originalShape = activePiece.shape;
+    
+    // Застосовуємо нову обернену форму
+    activePiece.shape = rotatedShape;
+
+    // Перевіряємо, чи нова форма не виходить за межі або не перетинається з іншими блоками
+    if (collide(0, 0)) {
+        activePiece.shape = originalShape; // Якщо обертання неможливе, повертаємо оригінальну форму
+    }
+}
+
+
 // Встановлення фігури на сітку
 function placePiece() {
     activePiece.shape.forEach((row, y) => {
@@ -122,7 +155,18 @@ function collide(offsetX, offsetY) {
     return false;
 }
 
-// Очищення ліній
+// Функція для створення нової фігури
+function createPiece() {
+    const piece = pieces[Math.floor(Math.random() * pieces.length)];
+    return {
+        shape: piece.shape,
+        color: piece.color,
+        x: Math.floor(COLS / 2) - Math.ceil(piece.shape[0].length / 2),
+        y: 0,
+    };
+}
+
+// Очищення ліній і оновлення рахунку
 function clearLines() {
     outer: for (let row = ROWS - 1; row >= 0; row--) {
         for (let col = 0; col < COLS; col++) {
@@ -132,10 +176,18 @@ function clearLines() {
         }
         grid.splice(row, 1);
         grid.unshift(Array(COLS).fill(0));
-        score += 100; // Оновлення рахунку
+        score += 100; // Додаємо очки за очищену лінію
+        linesCleared++; // Збільшуємо лічильник знищених ліній
+        updateScore(); // Оновлюємо відображення рахунку
+        document.getElementById('linesCleared').textContent = linesCleared; // Оновлюємо відображення знищених ліній
         dropInterval *= 0.9; // Підвищення складності
+
+        // Оновлення рівня в інформаційній панелі
+        level = Math.floor(linesCleared / 10) + 1; // Кожні 10 очищених ліній підвищуємо рівень
+        document.getElementById('levelDisplay').textContent = level; // Оновлюємо відображення рівня
     }
 }
+
 
 // Малювання фігури
 function drawPiece() {
@@ -175,13 +227,16 @@ function startGame() {
     if (gameInterval) {
         clearInterval(gameInterval);
     }
-    level = parseInt(levelSelect.value);
+    
+    level = parseInt(levelSelect.value); // Оновлення рівня
     activePiece = createPiece();
     dropInterval = 1000 / level;
     dropCounter = 0;
     gameInterval = setInterval(() => gameLoop(16), 16);
     
-    // Залишаємо кнопку "Старт" видимою, але можна її заблокувати
+    // Оновлення відображення рівня
+    document.getElementById('levelDisplay').textContent = level; // Оновлюємо відображення рівня
+
     startBtn.disabled = true; // Робимо кнопку неактивною після старту
     pauseBtn.style.display = 'inline-block'; // Показуємо кнопку "Пауза"
     levelSelector.style.display = 'none'; // Приховуємо вибір рівня
