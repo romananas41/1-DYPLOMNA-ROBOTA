@@ -9,10 +9,17 @@
 <body>
     <div class="container">
         <div class="controls-left">
+            <div class="info-box">
+                <div>Рахунок: <span id="score">0</span></div>
+                <div>Рівень: <span id="levelDisplay">1</span></div>
+                <div>Знищені лінії: <span id="linesCleared">0</span></div>
+            </div>
             <button id="startBtn">Старт</button>
         </div>
 
-        <canvas id="tetris"></canvas>
+        <div class="game-area">
+            <canvas id="tetris"></canvas>
+        </div>
 
         <div class="controls-right">
             <button id="pauseBtn" style="display: none;">Пауза</button>
