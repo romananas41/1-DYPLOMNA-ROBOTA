@@ -11,15 +11,41 @@ body {
 
 .container {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
+    gap: 40px;
+}
+
+.controls-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Вирівнюємо інформаційне вікно та кнопку по центру */
+}
+
+.info-box {
+    background-color: #fff;
+    border: 3px solid #FFD700;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    color: #141E30;
+    font-size: 20px;
+    text-align: left;
+    margin-bottom: 10px; /* Додаємо відступ знизу для відстані між вікном та кнопкою */
+}
+
+.game-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 canvas {
     background-color: #fff;
     border: 5px solid #FFD700;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    margin: 0 20px;
+    margin: 20px 0;
 }
 
 .controls-left, .controls-right {
@@ -71,3 +97,4 @@ select {
     color: #141E30;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
+
