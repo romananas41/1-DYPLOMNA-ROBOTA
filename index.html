@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тетріс</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="controls-left">
+            <button id="startBtn">Старт</button>
+        </div>
+
+        <canvas id="tetris"></canvas>
+
+        <div class="controls-right">
+            <button id="pauseBtn" style="display: none;">Пауза</button>
+        </div>
+
+        <div id="levelSelector" class="level-selector">
+            <h3>Оберіть рівень:</h3>
+            <select id="levelSelect">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
